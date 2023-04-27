@@ -1,0 +1,28 @@
+﻿#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+int main(){
+        int fd[3],n,m;
+        char buf[10],buffer[10];
+        pid_t p,q,r;
+        p=fork();
+        q=fork();
+        r=fork();
+        pipe(fd);
+        if(p==0){
+        //      printf("passing string to 3rd child ");
+                write(fd[1],"hello \n",6);
+        }
+        if(q==0){
+        //      printf("passing string to 3rd child from q ");
+                write(fd[1],"hi \n",3);
+        }
+        if(r==0){
+        //      printf("reading string from 3rd process");
+                n=read(fd[0],buf,10);
+                write(1,buf,n);
+                m=read(fd[0],buffer,10);
+                write(1,buffer,m);
+        }
+}
